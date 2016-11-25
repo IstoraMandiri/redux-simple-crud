@@ -4,7 +4,7 @@ export default function (actionNames) {
       const items = Array.isArray(_items) ? _items : [_items];
       return { type: actionNames.ADD, items };
     },
-    editItems(items) {
+    updateItems(items) {
       return { type: actionNames.UPDATE, items };
     },
     removeItems(_ids) {

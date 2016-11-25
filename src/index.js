@@ -1,9 +1,13 @@
-// let's create our redux store
-import getActions from './actions';
-import getReducer from './reducer';
+import actions from './actions';
+import reducer from './reducer';
+
+const methods = ['ADD', 'UPDATE', 'REMOVE'];
 
 export default function (storeName) {
-  const crud = getActions(storeName);
-  crud.reducer = getReducer(crud);
-  return crud;
+  const actionNames = methods.reduce((obj, name) => ({ ...obj, ...{ [name]: `${storeName}_${name}` } }), {});
+  return {
+    actions: actionNames,
+    reducer: reducer(actionNames),
+    ...actions(actionNames),
+  };
 }

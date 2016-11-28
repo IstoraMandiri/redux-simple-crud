@@ -5,7 +5,7 @@ function mapKeys(state) {
 }
 
 export default function (actionNames) {
-  return (state = {}, action) => {
+  return (state = { keys: [] }, action) => {
     switch (action.type) {
       case actionNames.ADD:
         return mapKeys({

@@ -26,6 +26,13 @@ export default function (actionNames) {
         return mapKeys(Object.keys(state).reduce((obj, key) => {
           return action.ids.indexOf(key) !== -1 ? obj : { ...obj, [key]: state[key] };
         }, {}));
+      case actionNames.REPLACE:
+        return mapKeys({
+          ...action.items.reduce((obj, acc) => {
+            const key = acc.key || uuid();
+            return { ...obj, [key]: { ...acc, key } };
+          }, {}),
+        });
       default:
         return state;
     }

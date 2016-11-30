@@ -11,5 +11,8 @@ export default function (actionNames) {
       const ids = Array.isArray(_ids) ? _ids : [_ids];
       return { type: actionNames.REMOVE, ids };
     },
+    replaceItems(items) {
+      return { type: actionNames.REPLACE, items };
+    },
   };
 }

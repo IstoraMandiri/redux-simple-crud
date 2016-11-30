@@ -1,6 +1,6 @@
 {
   "name": "redux-simple-crud",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A Super Simple CRUD Action & Reducer Factory",
   "author": "Chris Hitchcott <hitchcott@gmail.com> (http://hitchcott.com)",
   "main": "lib/index.js",

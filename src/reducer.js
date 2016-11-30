@@ -1,14 +1,26 @@
 import uuid from 'uuid';
 
-function mapKeys(state) {
-  return { ...state, keys: Object.keys(state).filter(k => k !== 'keys') };
+function mapKeys(opts, state) {
+  const indexes = {};
+  const configs = (opts.indexes || []).concat([{
+    name: 'keys',
+    transform: ({ key }) => key,
+  }]);
+  const indexKeys = configs.reduce((o, { name }) => ({ ...o, [name]: true }), {});
+  configs.forEach(({ name, transform }) => {
+    indexes[name] = Object.keys(state).map((itemKey) => {
+      if (indexKeys[itemKey]) { return false; }
+      return transform(state[itemKey]);
+    }).filter(i => i);
+  });
+  return { ...state, ...indexes };
 }
 
-export default function (actionNames) {
+export default function (actionNames, opts = {}) {
   return (state = { keys: [] }, action) => {
     switch (action.type) {
       case actionNames.ADD:
-        return mapKeys({
+        return mapKeys(opts, {
           ...state,
           ...action.items.reduce((obj, acc) => {
             const key = acc.key || uuid();
@@ -23,11 +35,11 @@ export default function (actionNames) {
           }, {}),
         };
       case actionNames.REMOVE:
-        return mapKeys(Object.keys(state).reduce((obj, key) => {
+        return mapKeys(opts, Object.keys(state).reduce((obj, key) => {
           return action.ids.indexOf(key) !== -1 ? obj : { ...obj, [key]: state[key] };
         }, {}));
       case actionNames.REPLACE:
-        return mapKeys({
+        return mapKeys(opts, {
           ...action.items.reduce((obj, acc) => {
             const key = acc.key || uuid();
             return { ...obj, [key]: { ...acc, key } };
